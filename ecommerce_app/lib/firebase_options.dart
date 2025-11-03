@@ -23,11 +23,20 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -47,6 +56,7 @@ class DefaultFirebaseOptions {
     projectId: 'collectibles-memorabilia-app',
     authDomain: 'collectibles-memorabilia-app.firebaseapp.com',
     storageBucket: 'collectibles-memorabilia-app.firebasestorage.app',
+    measurementId: 'G-XXXXXXXXXX',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -54,33 +64,6 @@ class DefaultFirebaseOptions {
     appId: '1:398662889533:android:7fb8cc7e47018e39987a54',
     messagingSenderId: '398662889533',
     projectId: 'collectibles-memorabilia-app',
-    storageBucket: 'collectibles-memorabilia-app.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyASKwuITdveyPkbMof0VEXNhl_4ODAD1G8',
-    appId: '1:398662889533:ios:686eb2cde1dab066987a54',
-    messagingSenderId: '398662889533',
-    projectId: 'collectibles-memorabilia-app',
-    storageBucket: 'collectibles-memorabilia-app.firebasestorage.app',
-    iosBundleId: 'com.example.ecommerceApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyASKwuITdveyPkbMof0VEXNhl_4ODAD1G8',
-    appId: '1:398662889533:ios:686eb2cde1dab066987a54',
-    messagingSenderId: '398662889533',
-    projectId: 'collectibles-memorabilia-app',
-    storageBucket: 'collectibles-memorabilia-app.firebasestorage.app',
-    iosBundleId: 'com.example.ecommerceApp',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBB-Top1D51mIHVaAwWwwm_dOC0cythuD4',
-    appId: '1:398662889533:web:78c2b607479bf3a2987a54',
-    messagingSenderId: '398662889533',
-    projectId: 'collectibles-memorabilia-app',
-    authDomain: 'collectibles-memorabilia-app.firebaseapp.com',
     storageBucket: 'collectibles-memorabilia-app.firebasestorage.app',
   );
 

@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:ecommerce_app/screens/auth_wrapper.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:ecommerce_app/screens/auth_wrapper.dart';
+import 'package:ecommerce_app/providers/cart_provider.dart'; // 1. ADD THIS
+import 'package:provider/provider.dart'; // 2. ADD THIS
 
 void main() async {
-  // STEP 1: Preserve the native splash screen
+  // 1. Preserve the splash screen
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // STEP 2: Initialize Firebase - connects to your Firebase project
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // 2. Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  // STEP 3: Run the app - AuthWrapper handles login vs home screen
-  runApp(const MyApp());
+  // 3. Run the app
+  runApp(
+    // 2. We wrap our app in the provider
+    ChangeNotifierProvider(
+      // 3. This "creates" one instance of our cart
+      create: (context) => CartProvider(),
+      // 4. The child is our normal app
+      child: const MyApp(),
+    ),
+  );
 
-  // STEP 4: Remove splash screen once app is ready
+  // 4. Remove the splash screen
   FlutterNativeSplash.remove();
 }
 
@@ -24,67 +36,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Root widget of your Flutter application
+    // Root of the app
     return MaterialApp(
-      // Remove the "Debug" banner in top-right corner
       debugShowCheckedModeBanner: false,
       title: 'eCommerce App',
-      theme: ThemeData(primarySwatch: Colors.grey),
-
-      // AuthWrapper automatically shows:
-      // - LoginScreen if user is NOT logged in
-      // - HomeScreen if user IS logged in (Firebase remembers sessions!)
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+      ),
+      // Show the auth wrapper to handle authentication state
       home: const AuthWrapper(),
-    );
-  }
-}
-
-// NOTE: You can safely DELETE everything below this line
-// as it's just the default Flutter counter app template
-// and you're now using AuthWrapper → LoginScreen/HomeScreen
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
