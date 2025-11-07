@@ -7,6 +7,8 @@ import 'package:ecommerce_app/screens/product_detail_screen.dart'; // 1. ADD THI
 import 'package:ecommerce_app/providers/cart_provider.dart'; // 1. ADD THIS
 import 'package:ecommerce_app/screens/cart_screen.dart'; // 2. ADD THIS
 import 'package:provider/provider.dart'; // 3. ADD THIS
+import 'package:ecommerce_app/screens/order_history_screen.dart'; // 1. ADD THIS
+import 'package:ecommerce_app/screens/profile_screen.dart'; // 1. ADD THIS
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //    matching the current user's ID
       final doc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_currentUser!.uid)
+          .doc(_currentUser.uid)
           .get();
 
       // 8. If the document exists...
@@ -63,21 +65,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // 1. Use the _currentUser variable we defined
-        title: Text(
-          _currentUser != null ? 'Welcome, ${_currentUser!.email}' : 'Home',
-        ),
+        // 1. We'll update this title later in the "Branding" module
+        title: Text(_currentUser != null ? 'Welcome, ${_currentUser!.email}' : 'Home'),
         actions: [
           // 2. --- THIS IS THE MAGIC ---
           //    This is a "collection-if". The IconButton will only
           //    be built IF _userRole is equal to 'admin'.
                     // 1. --- ADD THIS NEW WIDGET ---
           // This is a special, efficient way to use Provider
+          // 2. Your existing Cart Icon (Unchanged)
           Consumer<CartProvider>(
+
             // 2. The "builder" function rebuilds *only* the icon
             builder: (context, cart, child) {
               // 3. The "Badge" widget adds a small label
@@ -102,6 +104,19 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
 
+          // 2. --- ADD THIS NEW BUTTON ---
+          IconButton(
+            icon: const Icon(Icons.receipt_long), // A "receipt" icon
+            tooltip: 'My Orders',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const OrderHistoryScreen(),
+                ),
+              );
+            },
+          ),
+
           if (_userRole == 'admin')
             IconButton(
               icon: const Icon(Icons.admin_panel_settings),
@@ -117,10 +132,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
           // 4. The logout button (always visible)
+          // 5. --- THIS IS THE CHANGE ---
+          //    DELETE the old "Logout" IconButton
+          /*
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
-            onPressed: _signOut, // 5. Call our _signOut function
+            onPressed: _signOut, // We are deleting this
+          ),
+          */
+
+          // 6. ADD this new "Profile" IconButton
+          IconButton(
+            icon: const Icon(Icons.person_outline),
+            tooltip: 'Profile',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),
